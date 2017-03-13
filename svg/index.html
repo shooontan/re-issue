@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<!-- レスポンシブ未対応 -->
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+        <title>Re:issue</title>
+        <meta name="description" content="私の履修には問題がある。" />
+        <link rel="stylesheet" href="./css/style.css"/>
+    </head>
+
+    <body>
+        <svg class="defs">
+            <symbol id="arrow-icon" viewBox="0 0 32 32"><path d="M21.698,15.286l-9.002-8.999  c-0.395-0.394-1.035-0.394-1.431,0c-0.395,0.394-0.395,1.034,0,1.428L19.553,16l-8.287,8.285c-0.395,0.394-0.395,1.034,0,1.429  c0.395,0.394,1.036,0.394,1.431,0l9.002-8.999C22.088,16.325,22.088,15.675,21.698,15.286z"/></symbol>
+            <symbol id="pencil-icon" viewBox="0 0 1024 896"><path d="M704 64L576 192l192 192 128-128L704 64zM0 768l0.688 192.562L192 960l512-512L512 256 0 768zM192 896H64V768h64v64h64V896z"/></symbol>
+            <symbol id="like-icon" viewBox="0 0 512 512"><path d="M512 319.3c0-16.7-11.3-30.5-26.6-34.8 9.5-6.5 15.8-17.5 15.8-30 0-20-16.3-36.2-36.3-36.2h-68c-15-.6-31-3-39-11.8-22-23.2 14-56.8 21-75.4 6.4-18 22-54 8-93-14.7-42-59-35-66 7-4 24-32 89-74 127-37.8 33-71 55.8-85.7 73.7C148.3 262 133 266 133 266v180h21c29.5 0 117.8 30 161 31.5 59.5 2.3 69 .5 93.4-2.2l22.8-3.3c17.4-3 30.7-18 30.7-36 0-7-2-13-5-18 18-2 33-17 33-36 0-11-5-21-13-27.7 19-1 34.2-16.8 34.2-36zM0 302.5V466c0 20.2 16.4 36.6 36.6 36.6h43.6c13.5 0 24.4-11 24.4-24.4V266h-68C16.4 266 0 282.2 0 302.4zM51.5 430c9.2 0 16.7 7.5 16.7 16.8s-7.5 16.8-16.7 16.8c-9.3 0-16.8-7.5-16.8-16.8S42.2 430 51.5 430z"/></symbol>
+        </svg>
+        <div class="body-inner">
+            <header class="header">
+                <div class="header-inner">
+                    <div class="date-box">
+                        <p class="page-number"><span>No. </span><span>3</span></p>
+                        <p class="date">Date  <span>2017</span><span>03</span><span>13</span></p>
+                    </div>
+                    <h1>Re:issue「<span class="subject">線形代数</span>」</h1>
+                </div>
+            </header>
+            
+            <nav class="navi">
+                <div class="navi-inner">
+                    
+                    <div class="user-box">
+                        <img src="./img/profile.jpg">
+                        <p class="user-name">Shota</p>
+                        <p class="user-like"><svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#like-icon"></use></svg><span class="like-count">12</span>いいね</p>
+                    </div>
+                    
+                    <div class="course-box">
+                        <p>履修科目</p>
+                        <ul>
+                            <li>線形代数</li>
+                            <li>微分積分第一</li>
+                            <li>プログラミング演習</li>
+                            <li>中国語演習第二</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="search-box">
+                    </div>
+                    
+                </div>
+            </nav>
+            
+            <main class="main">
+                <div class="container">
+                    <div class="view">
+                        
+
+                        <div class="gallery">
+                            <input type="radio" id="switch1" name="gallery" checked="checked">
+                            <input type="radio" id="switch2" name="gallery">
+                            <input type="radio" id="switch3" name="gallery">
+
+                            <div class="slideFrame">
+                                <ul>
+                                    <li><img src="https://placehold.jp/f0c827/ffffff/280x520.png" alt="gallery_visual1" width="280" height="520"></li>
+                                    <li><img src="https://placehold.jp/5caff2/ffffff/400x680.png" alt="gallery_visual2" width="400" height="680"></li>
+                                    <li><img src="https://placehold.jp/87cf87/ffffff/520x280.png" alt="gallery_visual3" width="520" height="280"></li>
+                                </ul>
+                            </div>
+                            <ul class="slider-navi">
+                                <li><label for="switch1"></label></li>
+                                <li><label for="switch2"></label></li>
+                                <li><label for="switch3"></label></li>
+                            </ul>
+                            <p class="prev">
+                                <label for="switch1"></label>
+                                <label for="switch2"></label>
+                                <label for="switch3"></label>
+                                <svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-icon"></use></svg>
+                            </p>
+                            <p class="next">
+                                <label for="switch1"><svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-icon"></use></svg></label>
+                                <label for="switch2"><svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-icon"></use></svg></label>
+                                <label for="switch3"><svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#arrow-icon"></use></svg></label>
+                            </p>
+                            <!-- /#gallery --></div>
+                        
+                    </div>
+
+                    <div class="chat">
+                        <div class="comment">
+                            <ul class="messages">
+                                <li><p>線形代数を履修します。Yです。分からないときはよろしくお願いします。<span class="mess-date">2016.10.07</span></p></li>
+                                <li><p>Mです。今年も線形代数を履修します。よろしく！<span class="mess-date">2016.10.07</span></p></li>
+                                <li><p>そろそろ中間試験ですか...<span class="mess-date">2016.11.20</span></p></li>
+                                <li><p>範囲は？<span class="mess-date">2016.11.21</span></p></li>
+                                <li><p>1章から7章までだったはず<span class="mess-date">2016.11.21</span></p></li>
+                                <li><p>あしたテストだってさ<span class="mess-date">2016.12.01</span></p></li>
+                                <li><p>過去問もらいます<span class="mess-date">2016.12.01</span></p></li>
+                                <li><p>あと3時間か...<span class="mess-date">2016.12.02</span></p></li>
+                                <li><p>秀いただきました！<span class="mess-date">2016.12.02</span></p></li>
+                            </ul>
+                        </div><!-- comment -->
+                        
+                        <form class="submit-form">
+                            <button class="submit" type="submit" placeholder="私の履修には問題がある"><svg><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#pencil-icon"></use></svg></button>
+                            <input class="input" autofocus="">
+                            <!--<input class="submit" type="submit">-->
+                        </form>
+                        
+                    </div>
+                    
+                </div><!-- container -->
+                
+            </main>
+            
+            <footer class="footer">
+                <p class="copyright">&copy; 2017 Re:issue</p>
+            </footer>
+            
+        </div>
+
+
+    </body>
+</html>

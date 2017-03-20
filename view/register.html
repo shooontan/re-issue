@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- Chrome以外では見ちゃダメ -->
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+        <title>ユーザー登録 | Re:issue</title>
+        <meta name="description" content="Re:issueのユーザー登録画面" />
+        <link rel="stylesheet" href="/css/index.css"/>
+    </head>
+
+    <body>
+        <svg class="defs"></svg>
+
+        <header class="header">
+            <div class="header-inner">
+                <div class="date-box">
+                    <p class="page-number"><span>No. </span><span>3</span></p>
+                    <p class="date">Date  <span>2017</span><span>03</span><span>13</span></p>
+                </div>
+                <h1>Re:issue「<span class="subject">ユーザー登録</span>」</h1>
+            </div>
+        </header>
+
+        <main class="main">
+
+                <div class="data-box">
+
+                    <form method="post" action="/register" id="registerForm" class="register-form">
+                        <div class="name">
+                            <label for="name">名前</label>
+                            <input type="text" id="name" name="name" placeholder="your name">
+                        </div>
+
+                        <div class="year">
+                            <p>入学年度</p>
+                            <select id="yearSelect" name="year">
+                                <option>-</option>
+                            </select>
+                        </div>
+
+                        <div class="course">
+                            <p>学科・類</p>
+                            <select id="courseSelect" name="course">
+                                <option>学科を選択</option>
+                            </select>
+                        </div>
+
+                        <div class="opt-course">
+                            <p>コース</p>
+                            <select id="optCourse1Select" name="optCourse1">
+                                <option value="">1年のコース</option>
+                            </select>
+
+                            <select id="optCourse2Select" name="optCourse2">
+                                <option value="">2年のコース</option>
+                            </select>
+
+                            <select id="optCourse3Select" name="optCourse3">
+                                <option value="">3年のコース</option>
+                            </select>
+
+                            <select id="optCourse4Select" name="optCourse4">
+                                <option value="">4年のコース</option>
+                            </select>
+                        </div>
+
+                        <div class="register-btn-box">
+                            <button type="submit" id="registerBtn" class="register-btn re-btn">登録する</button>
+                        </div>
+
+                    </form>
+
+                    <form method="post" action="/subject" id="jsonForm">
+                        <!--<form method="post" action="/api/check" id="jsonForm">-->
+                        <input type="hidden" id="jsonVal" name="register">
+                    </form>
+
+                </div>
+        </main>
+
+        <footer class="footer">
+            <p class="copyright">&copy; 2017 Re:issue</p>
+        </footer>
+
+
+
+        <script src="/js/register.js"></script>
+
+    </body>
+</html>

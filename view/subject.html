@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!-- Chrome以外では見ちゃダメ -->
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+        <title>科目登録 | Re:issue</title>
+        <meta name="description" content="私の履修には問題がある。" />
+        <link rel="stylesheet" href="/css/index.css"/>
+    </head>
+
+    <body>
+        <svg class="defs"></svg>
+        
+            <header class="header">
+                <div class="header-inner">
+                    <div class="date-box">
+                        <p class="page-number"><span>No. </span><span>3</span></p>
+                        <p class="date">Date  <span>2017</span><span>03</span><span>13</span></p>
+                    </div>
+                    <h1>Re:issue「<span class="subject">科目登録</span>」</h1>
+                </div>
+            </header>
+            
+            <main class="main">
+                
+                <div class="main-inner">
+                    
+                    <p>Re:isseuに登録する科目を選択する。追加・削除可。</p>
+                    
+                    <div class="table-containner">                    
+                    <table id="subjectTable">
+                        <thead>
+                            <tr class="week">
+                                <th class="mon">月</th>
+                                <th class="tue">火</th>
+                                <th class="wed">水</th>
+                                <th class="thu">木</th>
+                                <th class="fri">金</th>
+                                <th class="sat">土</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr id="period1" class="period"></tr>
+                            <tr id="period2" class="period"></tr>
+                            <tr id="period3" class="period"></tr>
+                            <tr id="period4" class="period"></tr>
+                            <tr id="period5" class="period"></tr>
+                            <tr id="period6" class="period"></tr>
+                            <tr id="period7" class="period"></tr>
+                        </tbody>
+                    </table>
+                        
+                    </div>
+
+                </div>
+                
+                <div>
+                    <form method="post" id="tableForm" class="table-form" action="/user">
+                        <input type="hidden" id="tableVal" name="subject">
+                        <button type="submit" class="re-btn">時間割を登録する</button>
+                    </form>
+                </div>
+                
+                <div id="modalWindow" class="modal-window">
+                    <div id="modalInner" class="modal-inner">
+
+                        <h3><span id="modalDay">月</span>曜日<span id="modalPeriod">1</span>限の講義を選択する</h3>
+                        
+                        <div class="modal-btn-box">
+                            <p id="closeBtn" class="close-btn">閉じる
+                            <p class="register-btn">登録する
+                            <p class="delete-btn">削除する
+                        </div>
+                    </div>
+                </div>
+                
+            </main>
+            
+            <footer class="footer">
+                <p class="copyright">&copy; 2017 Re:issue</p>
+            </footer>
+            
+        
+        <script src="/js/subject.js"></script>
+
+    </body>
+</html>

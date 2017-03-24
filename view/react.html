@@ -6,12 +6,11 @@
         <script src="https://fb.me/react-15.2.0.js"></script>
         <script src="https://fb.me/react-dom-15.2.0.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-                                                                                                                                   
-        
-<!--        <link rel="stylesheet" href="./style.css"/>-->
+        <link rel="stylesheet" href="/css/user.css">
     </head>
+    
     <body>
-        <div id="container"></div>
+        <div id="container" class="body-inner"></div>
     </body>
     
     
@@ -156,9 +155,16 @@ var MarkList = React.createClass({
 
 
 var MenuBtn = React.createClass({
+    getInitialState() {
+        return {active: false};
+    },
+    // トグル定義
+    toggle(e) {
+        this.setState({active: !this.state.active});
+    },
     render: function() {
         return (
-            <div id="menuBtn" className="menu-btn">
+            <div id="menuBtn" className={'menu-btn' + (this.state.active ? ' active' : '')} onClick={this.toggle}>
                 <div className="menu-btn-inner">
                     <span></span>
                     <span></span>
@@ -236,31 +242,22 @@ var CourseBox = React.createClass({
     getInitialState: function() {
         return {data: []};
     },
-    componentDidMount: function() {
-        var url = "http://knium.net:3000/api/chatlog/58d0dea52c0663e94d47e1a6";
-        var xml = new XMLHttpRequest();
-        xml.onreadystatechange = function() {
-            if (xml.readyState === 4 && xml.status === 200) {
-                var jsonData = JSON.parse(xml.responseText);
-                console.log("taking");
-                console.log(jsonData);
-                this.setState({data: jsonData});
-            }
-        }.bind(this); // bind重要
-        xml.open("GET", url, true);
-        xml.send(null);
-    },
     
     render: function() {
-        var courseNodes = this.state.data.map(function(taking) {
-            return (
-                <CourseDayOfWeek week={taking}/>
-            )
-        });
+//        var courseNodes = this.state.data.map(function(taking) {
+//            return (
+//                <CourseDayOfWeek week={taking}/>
+//            )
+//        });
+//        return (
+//            <div className="">
+//                <p>履修一覧</p>
+//                {courseNodes}
+//            </div>
+//        )
         return (
             <div className="">
                 <p>履修一覧</p>
-                {courseNodes}
             </div>
         )
     }
@@ -316,38 +313,28 @@ var CommentList = React.createClass({
 
 //コメントリスト
 var CommentArea = React.createClass({
-    // jsonデータ
-    getInitialState: function() {
-        return {data: []};
-    },
-    componentDidMount: function() {
-        var url = "http://knium.net:3000/api/chatlog/58d0dea52c0663e94d47e1a6";
-        var xml = new XMLHttpRequest();
-        xml.onreadystatechange = function() {
-            if (xml.readyState === 4 && xml.status === 200) {
-                var jsonData = JSON.parse(xml.responseText);
-                console.log(jsonData);
-                this.setState({data: jsonData});
-            }
-        }.bind(this); // bind重要
-        xml.open("GET", url, true);
-        xml.send(null);
-    },
-
     render: function() {
-        var commentNodes = this.state.data.map(function(comment) {
-            return (
-                <Comment
-                    commText={comment.text}
-                    commDate={comment.created}
-                    key={comment._id}
-                    />
-            )
-        });
+//        var commentNodes = this.state.data.map(function(comment) {
+//            return (
+//                <Comment
+//                    commText={comment.text}
+//                    commDate={comment.created}
+//                    key={comment._id}
+//                    />
+//            )
+//        });
+//        return (
+//            <div className="comment">
+//                <ul className="messages">
+//                    {commentNodes}
+//                </ul>
+//            </div>
+//        )
         return (
-            <ul className="messages">
-                {commentNodes}
-            </ul>
+            <div className="comment">
+                <ul className="messages">
+                </ul>
+            </div>
         )
     }
 });
@@ -361,47 +348,20 @@ var FormButton = React.createClass({
 });
 
 var FormArea = React.createClass({
-    // jsonデータ取得
-    getInitialState: function() {
-        return {
-            subjectId: '58d0dea52c0663e94d47e1a6',
-            HOST: 'ws://knium.net:3000/api/chat/send',
-            ws: null
-        };
-    },
-    
-    componentDidMount: function() {
-//        const HOST = 'ws://knium.net:3000/api/chat/send';
-//        const ws = new WebSocket(HOST); // eslint-disable-line no-undef
-        
-        console.log(this.HOST);
-        
-        this.ws = new WebSocket(this.HOST);
-        
-//        const room = '58d0dea52c0663e94d47e1a6';
-        console.log(this.subjectId);
-        
-        this.ws.onopen = () => { // 接続を確認してからルーム別用の識別子msgを送る．
-            this.ws.send(`reIssueWSConnect://${this.subjectId}`);
-        };
-    },
-    
     CommSubmit(e) {
-        e.preventDefault();
-        var text = this.refs.text.value.trim(); // inputのテキストを取得
-        console.log(text);
-        this.refs.text.value = ''; // inputのテキストを削除
-        
-        var message = `reIssueWSChat://${this.subjectId}/?text=${text}&speaker=111111111111111111111111`;
-        this.ws.send(text);
+        var mess = this.refs.mess.value.trim(); // inputのテキストを取得
+        console.log(mess);
+        this.refs.mess.value = ''; // inputのテキストを削除
+        console.log(this.props.room);
+        var text = `reIssueWSChat://${this.props.room}/?text=${mess}&speaker=111111111111111111111111`;
+        this.props.ws.send(text);
         this.refs.text.focus();
-        
     },
     
     render: function() {
         return (
             <form className="submit-form form" onSubmit={this.CommSubmit}>
-                <input className="input" ref="text"/>
+                <input className="input" ref="mess"/>
                 <FormButton/>
             </form>
         );
@@ -411,16 +371,17 @@ var FormArea = React.createClass({
 
 var ChatArea = React.createClass({
     render: function() {
+        return (
+            <div className="chat">
+                <CommentArea/>
+                <FormArea ws={this.props.ws} room={this.props.room}/>
+            </div>
+        );
 //        return (
 //            <div className="chat">
 //                <CommentArea/>
-//                <FormArea/>
 //            </div>
 //        );
-        return (
-            <div className="chat">
-            </div>
-        );
     }
 });
 
@@ -429,7 +390,7 @@ var MainArea = React.createClass({
         return (
             <main className="main">
                 <div className="container">
-                    <ChatArea />
+                    <ChatArea ws={this.props.ws} room={this.props.room}/>
                 </div>
             </main>
         );
@@ -437,12 +398,44 @@ var MainArea = React.createClass({
 });
 
 var BodyInner = React.createClass({
+    // jsonデータ
+    getInitialState: function() {
+        return {
+            commentData: [],
+            ws: null,
+            room: "58d0dea52c0663e94d47e1a6"
+        };
+    },
+    componentDidMount: function() {
+        var url = "http://knium.net:3000/api/chatlog/58d0dea52c0663e94d47e1a6";
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function() {
+            if (xml.readyState === 4 && xml.status === 200) {
+                var jsonData = JSON.parse(xml.responseText);
+                console.log(jsonData);
+                this.setState({commentData: jsonData});
+            }
+        }.bind(this); // bind重要
+        xml.open("GET", url, true);
+        xml.send(null);
+        
+//        var room = "58d0dea52c0663e94d47e1a6";
+        
+        // websocket
+        const HOST = 'ws://knium.net:3000/api/chat/send';
+        var ws = new WebSocket(HOST);
+        
+        ws.onopen = () => { // 接続を確認してからルーム別用の識別子msgを送る．
+            ws.send(`reIssueWSConnect://${this.room}`);
+        };
+        this.setState({ws: ws});
+    },
     render: function() {
         return (
-            <div className="body-inner">
+            <div>
                 <HeaderArea />
                 <NaviArea />
-                <MainArea />
+                <MainArea ws={this.ws} room={this.room}/>
             </div>
         );
     }
@@ -450,19 +443,10 @@ var BodyInner = React.createClass({
 
 
 //レンダリング
-//ReactDOM.render(
-//    <ArticleArea/>,
-//    document.getElementById('container')
-//);
 ReactDOM.render(
     <BodyInner />,
     document.getElementById('container')
 );
-
-
     </script>
-    
-    
-<!--    <script src="./client.js"></script>-->
     
 </html>

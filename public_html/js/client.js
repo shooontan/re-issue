@@ -87,9 +87,10 @@ function reissueSocket(sub_id) {
             const text = `reIssueWSChat://${subId}/?text=${input.value}&speakerName=${userName}&speakerId=${userId}`;
             ws.send(text);
             
+            console.log(input.value);
+            
             var reg = /<script[^>]*?>/i.test(input.value);
             if (reg) {
-                p.setAttribute("class", "boo");
                 alert("CTFじゃねーよはげ");
             };
             

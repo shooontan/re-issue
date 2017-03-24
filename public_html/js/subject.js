@@ -72,6 +72,7 @@
     var modalPer = document.getElementById("modalPeriod");
     var modalSub = document.getElementById("modalSub");
     var modalList = document.getElementById("modalList");
+    var modalDelete = document.getElementById("deleteBtn");
     
     var urlBase = "http://knium.net:3000/api/subject/getByDayAndPeriod/?";
     // スクロール量
@@ -164,8 +165,18 @@
             
             // モーダルウィンドウを開く
             openModal();
+            
+            
+            // モーダル削除
+            modalDelete.addEventListener("click", function() {
+                e.target.textContent = "";
+                e.target.removeAttribute("data-subid");
+            }, false);
+            
+            
         }
     }, false);
+    
     
     
     // モーダルウィンドウを閉じる

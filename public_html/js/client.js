@@ -33,9 +33,10 @@ function reissueSocket(sub_id) {
     const ws = new WebSocket(HOST); // eslint-disable-line no-undef
     
 
-    
-    
-    
+    // 過去レポuploadのvalueセット
+    const subjectDOM = document.getElementById("subjectId");
+    subjectDOM.value = subId;
+    console.log("subId:  "+subId);
     
     
     

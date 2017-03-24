@@ -9,58 +9,76 @@
     
     // 必須項目チェック
     function checkValue() {
-        if ( name.value && year.value && course.value ) {
-            return true;
+        console.log(name.value);
+        console.log(year.value);
+        
+        console.log(course.value);
+        
+//        if ( name.value && year.value && course.value ) {
+//            return true;
+//        }
+        if ( !(name.value && year.value && course.value) ) {
+            return false;
         }
+        
+        
+        // 入学年度(デモ)
+        if (year.value != 2015) {
+            return false;
+        }
+
+        console.log(course[2].value);
+
+        // コース(デモ)
+        switch(optCourse[2].value) {
+            case ("Media"):
+            case ("MI"):
+            case ("CS"):
+                return true;
+        }
+        
+        
+        
         return false;
     }
     
     document.getElementById("registerForm").addEventListener("submit", function(e) {
-        e.preventDefault(); // 送信中止
+//        e.preventDefault(); // 送信中止
         
         if ( checkValue() ) { // 項目に不備なし
             // json
-//            var value = JSON.stringify({
-//                "enteredYear": year.value,
-//                "username": name.value,
-//                "course": "Media",
-////                "course": course.value,
-////                "optionalCourse": function() {
-////                    var optVal = [];
-////                    for (var i = 0; i < optCourse.length; i++) {
-////                        optVal[i] = (optCourse[i].value) ? optCourse[i].value : null;
-////                    }
-////                    return optVal;
-////                }()
-//            });
-            
             var value = JSON.stringify({
-                "enteredYear": 2015,
-                "username": "New Nersonu",
-                "course": "MI"
+                "enteredYear": year.value,
+                "name": name.value,
+                "course": optCourse[2].value
+//                "course": course.value
+//                "optionalCourse": function() {
+//                    var optVal = [];
+//                    for (var i = 0; i < optCourse.length; i++) {
+//                        optVal[i] = (optCourse[i].value) ? optCourse[i].value : null;
+//                    }
+//                    return optVal;
+//                }()
             });
             
             console.log(value);
             
             
-//            var url = "http://knium.net:3000/api/user";
-            url = window.location.origin+"/api/user";
+            var url = "http://knium.net:3000/api/user";
+//           var url = window.location.origin+"/api/user";
             
             var xml = new XMLHttpRequest();
             xml.onreadystatechange = function() {
                 if (xml.readyState === 4 && xml.status == 200) {
                     var data = JSON.parse(xml.response);
                     // id保存
-                    document.cookie = "id="+data["_id"];
+                    document.cookie = "user_id="+data["_id"];
                     console.log(document.cookie);
                 }
             }
             xml.open("POST", url);
             xml.setRequestHeader( 'Content-Type', 'application/json' );
             xml.send(value);
-            
-            // 送信
-           // document.getElementById("jsonForm").submit();
             
         } else {
             alert( "必須項目を入力してください" );
@@ -71,21 +89,15 @@
 }());
 
 
-(function() {
-    document.getElementById("test").addEventListener("click", function() {
-        
-    }, false);
-}());
-
 
 (function () {
     // 入学年度の選択リスト
     var select1 = {
-        "2013": "2013",
-        "2014": "2014",
-        "2015": "2015",
-        "2016": "2016",
-        "2017": "2017"
+        "2013": 2013,
+        "2014": 2014,
+        "2015": 2015,
+        "2016": 2016,
+        "2017": 2017
     };
 
     // 入学年度に対するコースリスト
@@ -158,15 +170,15 @@
     // コースに対するoptionコースリスト(3年)
     var select5 = {};
     select5["J"] = {
-            "メディア": "メディア",
-            "セキュリティ": "セキュリティ",
-            "経営": "経営"
+            "Media": "メディア",
+            "Security": "セキュリティ",
+            "Management": "経営"
     };
     select5["I"] = {
             "情報通信": "情報通信",
             "電子情報": "電子情報",
-            "情報数理工学": "情報数理工学",
-            "コンピュータサイエンス": "コンピュータサイエンス"
+            "MI": "情報数理工学",
+            "CS": "コンピュータサイエンス"
     };
     select5["M"] = {
         "先端ロボティクス": "先端ロボティクス",

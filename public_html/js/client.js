@@ -1,5 +1,7 @@
-(function () {
-    const init = (subjectId) => {
+function reissueSocket(sub_id) {
+    var subId = sub_id; // 科目id
+    
+    const init = (subId) => {
         const xhr = new XMLHttpRequest(); // eslint-disable-line
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4 && xhr.status === 200) {
@@ -24,27 +26,29 @@
                 }
             }
         };
-        xhr.open('GET', `http://knium.net:3000/api/chatlog/${subjectId}`, true);
+        xhr.open('GET', `http://knium.net:3000/api/chatlog/${subId}`, true);
         xhr.send();
     };
     const HOST = 'ws://knium.net:3000/api/chat/send';
     const ws = new WebSocket(HOST); // eslint-disable-line no-undef
-    const room = { 0: '58d0dea52c0663e94d47e1a6', 1: '58d0dea52c0663e94d47e1a7' };
-    const rand = Math.floor( Math.random() * 2); // eslint-disable-line
-    const subject = { 0: '線形代数', 1: '微積分' };
-    const title = document.getElementById('title'); // eslint-disable-line
-    title.textContent = subject[rand];
+    
+
+    
+    
+    
+    
+    
+    
     const form = document.querySelector('.form'); // eslint-disable-line
-    console.log(room[rand]);
-    init(room[rand]);
+    init(subId);
     
     ws.onopen = () => { // 接続を確認してからルーム別用の識別子msgを送る．
-        ws.send(`reIssueWSConnect://${room[rand]}`);
+        ws.send(`reIssueWSConnect://${subId}`);
     };
     form.onsubmit = () => {
         const input = document.querySelector('.input'); // eslint-disable-line
         if (input.value) { // 空文字の送信ができないように
-            const text = `reIssueWSChat://${room[rand]}/?text=${input.value}&speaker=111111111111111111111111`;
+            const text = `reIssueWSChat://${subId}/?text=${input.value}&speaker=111111111111111111111111`;
             ws.send(text);
             input.value = '';
             input.focus();
@@ -87,5 +91,72 @@
         return date.getFullYear()+'.'+(date.getMonth()+1)+'.'+date.getDate();
     }
     
-}());
 
+    // 科目名を表示
+    var displayTitle = function() {
+        var subUrl = "http://knium.net:3000/api/subject/";
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function() {
+            if (xml.readyState === 4 && xml.status === 200) {
+                // ユーザーの履修データ
+                var data = JSON.parse(xml.responseText);
+
+                console.log(data);
+
+                // 科目id
+                const subjectName = data.name;
+                console.log(subjectName);
+                const title = document.getElementById('title');
+                title.textContent = subjectName;
+            }
+        }
+        xml.open("GET", subUrl+subId, true);
+        xml.setRequestHeader( "Content-Type", "application/json" );
+        xml.send(null);
+    }();
+    
+};
+
+
+(function() {
+    function getCookie(key) {
+        var cookies = document.cookie;
+        var cookieItem = cookies.split(";");
+        for (i = 0; i < cookieItem.length; i++) {
+            var elem = cookieItem[i].split("=");
+            if (elem[0].trim() === key) {
+                return unescape(elem[1]);
+            } else {
+                continue;
+            }
+        }
+    }
+    
+    var ajax = function() {
+        var data;
+        return new Promise(function(resolve, reject) {
+            var urlBase = "http://knium.net:3000/api/subject/";
+            var xml = new XMLHttpRequest();
+            xml.onreadystatechange = function() {
+                if (xml.readyState === 4 && xml.status === 200) {
+                    var getData = JSON.parse(xml.responseText); 
+                    console.log(getData.name);
+//                    return subjectData.name;
+                    this.data = getData.name;
+                }
+            }
+            xml.open("GET", urlBase+subId, false);
+            xml.setRequestHeader("Content-Type", "application/json" );
+            xml.send(null);
+            var subjectData = JSON.parse(xml.responseText);
+            return subjectData.name;
+        });
+    };
+    
+    // cookieから科目idを取得
+    var sub_id = getCookie("sub_id");
+    if (sub_id) {
+        // チャットチャット
+        reissueSocket(sub_id);
+    }
+}());

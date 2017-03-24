@@ -190,8 +190,8 @@
 
 // 時間割りデータの送信
 (function() {
-    var user_id = "58d2794c7720383e9bf643b5";
-    var user_name = "New Nersonu";
+//    var user_id = "58d4aa501fc42b028154345b";
+//    var user_name = "nersonu";
     var weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var tableData = {};
     for(var i = 0; i < weeks.length; i++) {
@@ -200,8 +200,25 @@
     
     var tableForm = document.getElementById("tableForm");
     
+    // cookeiからユーザidを取得
+    var user_id = function(key) {
+        var cookies = document.cookie;
+        var cookieItem = cookies.split(";");
+        for (i = 0; i < cookieItem.length; i++) {
+            var elem = cookieItem[i].split("=");
+            if (elem[0].trim() === key) {
+                return unescape(elem[1]);
+            } else {
+                continue;
+            }
+        }
+    }("user_id");
+    
+    console.log(user_id);
+    
+    
     tableForm.addEventListener("submit", function(e) {
-        e.preventDefault();
+//        e.preventDefault();
         
         var table = document.getElementById("subjectTable");
         
@@ -209,10 +226,21 @@
         for(var i = 1; i < table.rows.length; i++) {
             for(var j = 0; j < table.rows[i].cells.length; j++) {
                 var subText = table.rows[i].cells[j].innerText;
-                // 講義科目名を取得する
-                tableData[weeks[j]][i-1] = (subText) ? subText : null;
+                
+                if (subText) {
+                    // 講義科目id取得
+                    var subId = table.rows[i].cells[j].getAttribute("data-subid");
+                    
+                    tableData[weeks[j]][i-1] = {"_id": subId, "name": subText};
+                } else {
+                    tableData[weeks[j]][i-1] = null;
+                }
+                
             }
         }
+        
+        console.log(tableData);
+        
         
         // inputのvalueに値を入れる
         var value = JSON.stringify({
@@ -222,11 +250,10 @@
         
         console.log(value);
         
-        
-        url = "http://knium.net:3000/api/user/"+user_id;
+        var url = "http://knium.net:3000/api/user/"+user_id;
         var xml = new XMLHttpRequest();
         xml.onreadystatechange = function() {
-            if (xml.readyState === 4 && xml.status == 200) {
+            if (xml.readyState === 4 && xml.status === 200) {
                 var data = JSON.parse(xml.response);
                 console.log(data);
             }

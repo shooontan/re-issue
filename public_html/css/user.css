@@ -258,9 +258,11 @@ img {
       cursor: initial; }
 
 .view, .chat, .repo, .upload {
-  display: inline-block;
+  display: none;
   width: 100%;
   vertical-align: top; }
+  .view.active, .chat.active, .repo.active, .upload.active {
+    display: inline-block; }
 
 .gallery {
   position: relative;
@@ -410,6 +412,14 @@ img {
   width: 100%;
   max-width: 800px;
   text-align: center; }
+  @media (min-width: 600px) and (max-width: 959px) {
+    .submit-form {
+      left: 50px;
+      width: initial; } }
+  @media (max-width: 599px) {
+    .submit-form {
+      left: 0;
+      width: initial; } }
   .submit-form input {
     padding: 0;
     margin: 0;
@@ -460,9 +470,8 @@ img {
       fill: #555;
       transision: .3s; }
 
-.repo {
-  width: 100%;
-  padding-bottom: 80px; }
+.upload {
+  padding-top: 50px; }
 
 .footer {
   display: none;

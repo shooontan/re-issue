@@ -383,9 +383,13 @@ img {
 }
 
 .view, .chat, .repo, .upload {
-    display: inline-block;
+    display: none;
     width: 100%;
     vertical-align: top;
+    
+    &.active {
+        display: inline-block;
+    }
 }
 
 
@@ -616,6 +620,17 @@ img {
     max-width: 800px;
     text-align: center;
     
+    @include tablet {
+        left: 50px;
+        width: initial;
+    }
+
+    @include mobile {
+        left: 0;
+        width: initial;
+    }
+    
+    
     input {
         padding: 0;
         margin: 0;
@@ -687,8 +702,11 @@ img {
 
 // 過去レポ一覧
 .repo {
-    width: 100%;
-    padding-bottom: 80px;
+}
+
+
+.upload {
+    padding-top: 50px;
 }
 
 

@@ -1,8 +1,8 @@
 function reissueSocket(sub_id) {
     var subId = sub_id; // 科目id
     
-    // cookeiからユーザidを取得
-    const displayName = function(key) {
+    // cookie
+    function getCookie(key) {
         var cookies = document.cookie;
         var cookieItem = cookies.split(";");
         for (i = 0; i < cookieItem.length; i++) {
@@ -13,9 +13,16 @@ function reissueSocket(sub_id) {
                 continue;
             }
         }
-    }("user_name");
+    }
     
-    console.log(displayName);
+    // cookeiからユーザ名を取得
+    const userName = getCookie("user_name");
+    const userId = getCookie("user_id");
+    
+    
+    console.log("userName: "+userName);
+    console.log("userId: "+userId);
+    
     
     const init = (subId) => {
         const xhr = new XMLHttpRequest(); // eslint-disable-line
@@ -65,7 +72,7 @@ function reissueSocket(sub_id) {
     form.onsubmit = () => {
         const input = document.querySelector('.input'); // eslint-disable-line
         if (input.value) { // 空文字の送信ができないように
-            const text = `reIssueWSChat://${subId}/?text=${input.value}&speaker=${displayName}`;
+            const text = `reIssueWSChat://${subId}/?text=${input.value}&speakerName=${userName}&speakerId=${userId}`;
             ws.send(text);
             input.value = '';
             input.focus();
@@ -107,20 +114,6 @@ function reissueSocket(sub_id) {
             date = new Date(time);
         }
         return date.getFullYear()+'.'+(date.getMonth()+1)+'.'+date.getDate();
-    }
-    
-    // cookie
-    function getCookie(key) {
-        var cookies = document.cookie;
-        var cookieItem = cookies.split(";");
-        for (i = 0; i < cookieItem.length; i++) {
-            var elem = cookieItem[i].split("=");
-            if (elem[0].trim() === key) {
-                return unescape(elem[1]);
-            } else {
-                continue;
-            }
-        }
     }
     
 

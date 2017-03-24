@@ -1,3 +1,5 @@
+var DisplayName = "";
+
 (function() {
     var urlBase = "http://knium.net:3000/api/user/";
 //    var user_id = "58d2794c7720383e9bf643b5";
@@ -77,8 +79,10 @@
                 var data = JSON.parse(xml.responseText);
                 console.log("name: "+data.name);
                 // 名前表示
-                var displayName = document.getElementById("displayName");
-                displayName.textContent = data.name;
+                var userName = document.getElementById("displayName");
+                userName.textContent = data.name;
+                
+                DisplayName = data.name;
             }
         }
         xml.open("GET", urlBase+user_id, true);
@@ -87,6 +91,7 @@
     }(user_id);
     
 }());
+
 
 
 // メニュー

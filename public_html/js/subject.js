@@ -218,7 +218,7 @@
     
     
     tableForm.addEventListener("submit", function(e) {
-//        e.preventDefault();
+        e.preventDefault();
         
         var table = document.getElementById("subjectTable");
         
@@ -230,8 +230,9 @@
                 if (subText) {
                     // 講義科目id取得
                     var subId = table.rows[i].cells[j].getAttribute("data-subid");
-                    
-                    tableData[weeks[j]][i-1] = {"_id": subId, "name": subText};
+                    tableData[weeks[j]][i-1] = {
+                        "_id": subId, "name": subText
+                    };
                 } else {
                     tableData[weeks[j]][i-1] = null;
                 }
@@ -256,6 +257,8 @@
             if (xml.readyState === 4 && xml.status === 200) {
                 var data = JSON.parse(xml.response);
                 console.log(data);
+                
+                tableForm.submit();
             }
         }
         xml.open("POST", url);

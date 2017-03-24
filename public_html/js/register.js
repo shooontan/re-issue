@@ -1,4 +1,7 @@
 (function() {
+    document.cookie = "user_id=;";
+    console.log(document.cookie);
+    
     var name = document.getElementById("name");
     var year = document.getElementById("yearSelect");
     var course = document.getElementById("courseSelect");
@@ -42,8 +45,10 @@
         return false;
     }
     
-    document.getElementById("registerForm").addEventListener("submit", function(e) {
-//        e.preventDefault(); // 送信中止
+    var registerForm = document.getElementById("registerForm");
+    
+    registerForm.addEventListener("submit", function(e) {
+        e.preventDefault(); // 送信中止
         
         if ( checkValue() ) { // 項目に不備なし
             // json
@@ -64,21 +69,31 @@
             console.log(value);
             
             
-            var url = "http://knium.net:3000/api/user";
-//           var url = window.location.origin+"/api/user";
             
+            
+            var url = "http://knium.net:3000/api/user/";
             var xml = new XMLHttpRequest();
             xml.onreadystatechange = function() {
-                if (xml.readyState === 4 && xml.status == 200) {
+                if (xml.readyState === 4 && xml.status === 200) {
                     var data = JSON.parse(xml.response);
+                    console.log(data);
+                    
+
                     // id保存
-                    document.cookie = "user_id="+data["_id"];
+                    document.cookie = "user_id="+data._id;
+                    
                     console.log(document.cookie);
+                    
+                    registerForm.submit();
+                    
                 }
             }
             xml.open("POST", url);
-            xml.setRequestHeader( 'Content-Type', 'application/json' );
+            xml.setRequestHeader( "Content-Type", "application/json" );
             xml.send(value);
+            
+            
+            
             
         } else {
             alert( "必須項目を入力してください" );

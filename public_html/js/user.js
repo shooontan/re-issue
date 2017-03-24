@@ -19,6 +19,7 @@
     }("user_id");
     
     
+    console.log(document.cookie);
     console.log(user_id);
     
     

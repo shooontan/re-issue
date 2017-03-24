@@ -362,28 +362,30 @@ img {
     
     li{
         display: inline-block;
+        width: (100%/3);
         border-bottom: 2px solid $line-color;
+        cursor: pointer;
         line-height: 50px;
         text-align: center;
-        width: 33%;
+        transition: .3s;
         
         &:hover {
-            background: rgba(#F06292, .8);
+            background: rgba(#e8b160, .8);
+            color: #fff;
+        }
+        
+        &.active {
+            background: $line-color;
+            color: #fff;
+            cursor: initial;
         }
     }
 }
 
-.view, .chat {
+.view, .chat, .repo, .upload {
     display: inline-block;
     width: 100%;
     vertical-align: top;
-}
-
-.view {
-    
-    @include large-desktop{
-        width: 40%;
-    }
 }
 
 
@@ -560,10 +562,6 @@ img {
 
 .chat {
     text-align: left;
-    
-    @include large-desktop{
-        width: 55%;
-    }
 }
 
 
@@ -600,11 +598,21 @@ img {
     }
 }
 
+.messages {
+    li {
+        word-wrap: break-word;
+    }
+}
+
+
 .submit-form {
-    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    padding: 10px;
     margin: 0 auto;
     width: 100%;
     max-width: 800px;
+    text-align: center;
     
     input {
         padding: 0;
@@ -632,9 +640,9 @@ img {
     .input {
         margin-left: -6px;
         padding: 0 1em;
-        width: 80%;
         height: 36px;
         border: 2px solid #ccc;
+        width: calc(100% - 80px);
         vertical-align: top;
         
         &:focus {
@@ -672,6 +680,13 @@ img {
             transision: .3s;
         }
     }
+}
+
+
+// 過去レポ一覧
+.repo {
+    width: 100%;
+    padding-bottom: 80px;
 }
 
 

@@ -243,21 +243,24 @@ img {
   display: block; }
   .tab li {
     display: inline-block;
+    width: 33.33333%;
     border-bottom: 2px solid #63a5ae;
+    cursor: pointer;
     line-height: 50px;
     text-align: center;
-    width: 33%; }
+    transition: .3s; }
     .tab li:hover {
-      background: rgba(240, 98, 146, 0.8); }
+      background: rgba(232, 177, 96, 0.8);
+      color: #fff; }
+    .tab li.active {
+      background: #63a5ae;
+      color: #fff;
+      cursor: initial; }
 
-.view, .chat {
+.view, .chat, .repo, .upload {
   display: inline-block;
   width: 100%;
   vertical-align: top; }
-
-@media (min-width: 1281px) {
-  .view {
-    width: 40%; } }
 
 .gallery {
   position: relative;
@@ -367,9 +370,6 @@ img {
 
 .chat {
   text-align: left; }
-  @media (min-width: 1281px) {
-    .chat {
-      width: 55%; } }
 
 .comment {
   padding-bottom: 100px;
@@ -397,11 +397,17 @@ img {
       font-size: 14px;
       letter-spacing: -.1px; }
 
+.messages li {
+  word-wrap: break-word; }
+
 .submit-form {
-  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  padding: 10px;
   margin: 0 auto;
   width: 100%;
-  max-width: 800px; }
+  max-width: 800px;
+  text-align: center; }
   .submit-form input {
     padding: 0;
     margin: 0;
@@ -422,9 +428,9 @@ img {
   .submit-form .input {
     margin-left: -6px;
     padding: 0 1em;
-    width: 80%;
     height: 36px;
     border: 2px solid #ccc;
+    width: calc(100% - 80px);
     vertical-align: top; }
     .submit-form .input:focus {
       outline: none; }
@@ -451,6 +457,10 @@ img {
       height: 30px;
       fill: #555;
       transision: .3s; }
+
+.repo {
+  width: 100%;
+  padding-bottom: 80px; }
 
 .footer {
   display: none;

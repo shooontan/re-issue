@@ -19,23 +19,48 @@
         e.preventDefault(); // 送信中止
         
         if ( checkValue() ) { // 項目に不備なし
-            var jsonVal = document.getElementById("jsonVal");
-            // jsonに変換
-            jsonVal.value = JSON.stringify({
-                "enteredYear": year.value,
-                "name": name.value,
-                "course": course.value,
-                "optionalCourse": function() {
-                    var optVal = [];
-                    for (var i = 0; i < optCourse.length; i++) {
-                        optVal[i] = (optCourse[i].value) ? optCourse[i].value : null;
-                    }
-                    return optVal;
-                }()
+            // json
+//            var value = JSON.stringify({
+//                "enteredYear": year.value,
+//                "username": name.value,
+//                "course": "Media",
+////                "course": course.value,
+////                "optionalCourse": function() {
+////                    var optVal = [];
+////                    for (var i = 0; i < optCourse.length; i++) {
+////                        optVal[i] = (optCourse[i].value) ? optCourse[i].value : null;
+////                    }
+////                    return optVal;
+////                }()
+//            });
+            
+            var value = JSON.stringify({
+                "enteredYear": 2015,
+                "username": "New Nersonu",
+                "course": "MI"
             });
             
+            console.log(value);
+            
+            
+//            var url = "http://knium.net:3000/api/user";
+            url = window.location.origin+"/api/user";
+            
+            var xml = new XMLHttpRequest();
+            xml.onreadystatechange = function() {
+                if (xml.readyState === 4 && xml.status == 200) {
+                    var data = JSON.parse(xml.response);
+                    // id保存
+                    document.cookie = "id="+data["_id"];
+                    console.log(document.cookie);
+                }
+            }
+            xml.open("POST", url);
+            xml.setRequestHeader( 'Content-Type', 'application/json' );
+            xml.send(value);
+            
             // 送信
-            document.getElementById("jsonForm").submit();
+           // document.getElementById("jsonForm").submit();
             
         } else {
             alert( "必須項目を入力してください" );
@@ -43,6 +68,13 @@
 
     }, false);
     
+}());
+
+
+(function() {
+    document.getElementById("test").addEventListener("click", function() {
+        
+    }, false);
 }());
 
 
@@ -162,11 +194,7 @@
     // 入学年度の選択リストを作成
     createSelection( yearSel, select1);
     
-    /**
-     * optionの作成
-     * @param object sel selectオブジェクト
-     * @param object selOpt 選択肢
-     */
+    // optionの作成
     function createSelection(sel, selOpt) {
         if (sel.children.length > 1) { // 初期optionは除く
             // 子要素を全て削除

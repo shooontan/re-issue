@@ -1,71 +1,170 @@
+// 初期画面の形成
 (function (){
-    var url = window.location.origin+"/api/taking";
-    var user_id = "58b5179a82e96efabf76866f";
+//    var url = "http://knium.net:3000/api/subject/getbycourse/?course=MI";
+    var url = "http://reissue/api/subject";
     var weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     
-    var xml = new XMLHttpRequest();
-    xml.onreadystatechange = function() {
-        if (xml.readyState === 4 && xml.status === 200) {
-            // default時間割りデータ
-            var data = JSON.parse(xml.responseText);
-            display(data["taking"]);
-        }
-    }
-    xml.onload = function() {
-        //alert("complete"); //通信完了時
-    }
-    xml.open("GET", url, true);
-    xml.send(null);
-    
+    // 週6、7限までの授業オブジェクト
     function display(subjects) {
         // 各週
-        for( var i = 0; i < weeks.length; ++i ) {
-            var ul = document.getElementById( weeks[i]+"Subject" );
-            
-            // デフォルトの講義
-            var defaultStudy = subjects[weeks[i]];
-            for( var j = 0; j < defaultStudy.length; ++j ) {
-                
+        for (var i = 0; i < weeks.length; i++) {
+            // 各週の講義
+            var dayOfSubs = subjects[weeks[i]];
+            for( var j = 0; j < dayOfSubs.length; j++ ) {
                 var period = document.getElementById("period"+(j+1));
                 var td = document.createElement("td");
-                
-                if (defaultStudy[j]) { // 講義あり
-                    td.innerHTML = "<span>"+defaultStudy[j]+"</span>";
-                } else { // 講義なし
-                    td.innerHTML = "<span></span>";
+                var span = document.createElement("span");
+                if (dayOfSubs[j]) { // 講義あり
+                    var subName = dayOfSubs[j]["name"]; // 講義名
+                    var subId = dayOfSubs[j]["_id"]; // 講義
+                    // 科目追加
+                    span.appendChild( document.createTextNode(subName) );
+                    // 科目id追加
+                    td.setAttribute("data-subid", subId);
                 }
-                period.appendChild(td);   
+                td.appendChild(span);
+                period.appendChild(td);
             }
         }
     }
+    
+    function getCookie(key) {
+        var cookies = document.cookie;
+        var cookieItem = cookies.split(";");
+        for (i = 0; i < cookieItem.length; i++) {
+            var elem = cookieItem[i].split("=");
+            if (elem[0].trim() === key) {
+                return unescape(elem[1]);
+            } else {
+                continue;
+            }
+        }
+    }
+    
+    // デフォルト科目を取得する
+    var xml = new XMLHttpRequest();
+    xml.onreadystatechange = function () {
+        if (xml.readyState === 4 && xml.status === 200) {
+            // デフォルト科目一覧
+            var defaultSub = JSON.parse(xml.responseText);
+            
+            // 土曜日追加(仮)
+            defaultSub["Sat"] = [null,null,null,null,null,null,null];
+            
+            display(defaultSub);
+        }
+    };
+    xml.open("GET", url, true);
+    xml.setRequestHeader("Content-Type", "application/json");
+    xml.send(null);
     
 }());
 
 
 // モーダルウィンドウ
 (function () {
-    var weeks = ["月", "火", "水", "木", "金", "土"];
+    var weeks = [
+        ["Mon","月"], ["Tue","火"], ["Wed","水"],
+        ["Thu","木"], ["Fri","金"], ["Sat", "土"]
+    ];
     var table = document.getElementById("subjectTable");
     var modalWin = document.getElementById("modalWindow");
+    var modalDay = document.getElementById("modalDay");
+    var modalPer = document.getElementById("modalPeriod");
+    var modalSub = document.getElementById("modalSub");
+    var modalList = document.getElementById("modalList");
     
+    var urlBase = "http://knium.net:3000/api/subject/getByDayAndPeriod/?";
     // スクロール量
     var scrollY;
+    
+    // モーダルを開く
+    function openModal() {
+        modalWin.classList.add("active");
+    }
+    
+    // モーダルを閉じる
+    function closeModal() {
+        // スクロール位置を戻す
+        window.scrollTo(0, scrollY);
+        // モーダルを隠す
+        modalWin.classList.remove("active");
+        // modalListの子要素を削除
+        var child;
+        while(child = modalList.lastChild) {
+            modalList.removeChild(child);
+        }
+    }
+    
+    
+    // モダルウィンドウに科目リストを表示する
+    function display(list, tdEle) {
+        var li = [];
+        // 講義リストDOMを作成
+        for(var i = 0; i < list.length; i++) {
+            li[i] = document.createElement("li");
+            var subName = document.createTextNode(list[i].name);
+            li[i].textContent = list[i].name;
+            li[i].setAttribute("data-subid", list[i]._id);
+            modalList.appendChild(li[i]);
+            
+            // ついでにクリックイベントを。
+            li[i].addEventListener("click", function(e) {
+                // td要素のspanを削除
+                var child;
+                while(child = tdEle.lastChild) {
+                    tdEle.removeChild(child);
+                }
+                
+                var span = document.createElement("span");
+                span.textContent = e.target.textContent;
+                tdEle.appendChild(span);
+                
+                // テーブルtdにidと講義名を挿入!!!!
+                tdEle.setAttribute(
+                    "data-subid",
+                    e.target.getAttribute("data-subid")
+                );
+                
+                // モダル閉じる
+                closeModal();
+            }, false);
+        }
+    };
+    
+    
     
     // 時間割クリック
     table.addEventListener("click", function(e) {
         if ( e.target.tagName === "TD" ) {
-            // スクロール量を取得
-            scrollY = window.pageYOffset;
+            scrollY = window.pageYOffset; // スクロール量
+            var tdPosi = getTdPosition(e.target);  // [0]:限 [1]:曜日
             
-            // tdを取得
-            var td = table.getElementsByTagName("td");
-            var tdPosi = getTdPosition(e.target);
+            // モダルタイトル
+            modalDay.textContent = weeks[tdPosi[1]][1];
+            modalPer.textContent = tdPosi[0]+1;
             
-            document.getElementById("modalDay").innerHTML = weeks[tdPosi[1]];
-            document.getElementById("modalPeriod").innerHTML = tdPosi[0] + 1;
+            var modalSubTxt = e.target.textContent;
+            modalSub.textContent = (modalSubTxt) ? modalSubTxt : "なし";
+            
+            // パラメータセット(1-7, Won-Fri)
+            var url = urlBase+"period="+(tdPosi[0]+1)+"&dayOfWeek="+weeks[tdPosi[1]][0];
+            
+            var xml = new XMLHttpRequest();
+            xml.onreadystatechange = function() {
+                if (xml.readyState === 4 && xml.status === 200) {
+                    // m曜n限科目一覧
+                    var subjectList = JSON.parse(xml.responseText);
+                    display(subjectList, e.target);
+                }
+            }
+            xml.open("GET", url, true);
+            xml.setRequestHeader("Content-Type", "application/json" );
+            xml.send(null);
+            
             
             // モーダルウィンドウを開く
-            modalWin.classList.add("active");   
+            openModal();
         }
     }, false);
     
@@ -75,37 +174,34 @@
         switch( e.target.id ) {
             case( "modalWindow" ):
             case( "closeBtn" ):
-                // スクロール位置を戻す
-                window.scrollTo(0, scrollY);
-                // モーダルを隠す
-                modalWin.classList.remove("active");
+                closeModal();
                 break;
         }
-
     }, false);
     
     
     // tdの位置を取得
     function getTdPosition(td) {
         return [td.parentNode.rowIndex-1, td.cellIndex]
-    }
+    };
     
 }());
 
 
-
 // 時間割りデータの送信
 (function() {
-    var user_id = "58b5179a82e96efabf76866f";
-    var user_name = "テスト太郎";
+    var user_id = "58d2794c7720383e9bf643b5";
+    var user_name = "New Nersonu";
     var weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var tableData = {};
     for(var i = 0; i < weeks.length; i++) {
         tableData[weeks[i]] = [];
     }
     
-    document.getElementById("tableForm").addEventListener("submit", function(e) {
-//        e.preventDefault();
+    var tableForm = document.getElementById("tableForm");
+    
+    tableForm.addEventListener("submit", function(e) {
+        e.preventDefault();
         
         var table = document.getElementById("subjectTable");
         
@@ -119,12 +215,26 @@
         }
         
         // inputのvalueに値を入れる
-        document.getElementById("tableVal").value = JSON.stringify({
+        var value = JSON.stringify({
             "user_id": user_id,
-            "name": user_name,
             "taking": tableData
         });
-
+        
+        console.log(value);
+        
+        
+        url = "http://knium.net:3000/api/user/"+user_id;
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function() {
+            if (xml.readyState === 4 && xml.status == 200) {
+                var data = JSON.parse(xml.response);
+                console.log(data);
+            }
+        }
+        xml.open("POST", url);
+        xml.setRequestHeader( "Content-Type", "application/json" );
+        xml.send(value);
+        
     }, false);
     
 }());

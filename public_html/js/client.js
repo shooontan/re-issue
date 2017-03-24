@@ -6,21 +6,30 @@
                 const chatLog = JSON.parse(xhr.response);
                 for (let i = 0; i < chatLog.length; i += 1) {
                     const messageList = document.querySelector('.messages'); // eslint-disable-line
+                    const span = document.createElement('span');
+                    span.setAttribute("class", "mess-date");
+                    span.textContent = getPostTime(chatLog[i].created);
+                    const p = document.createElement('p');
+                    p.textContent = chatLog[i].text; // 本文
+                    
+                    var reg = /<script[^>]*?>/i.test(chatLog[i].text);
+                    if (reg) {
+                        p.setAttribute("class", "boo");
+                    };
+                    
+                    p.appendChild(span);
                     const li = document.createElement('li'); // eslint-disable-line
-                    li.innerHTML = '<p>'+chatLog[i].text+'<span class="mess-date">'+getPostTime(chatLog[i].created)+'</sapn></p>';
+                    li.appendChild(p);
                     messageList.appendChild(li);
                 }
             }
         };
-        xhr.onload = function() {
-            //alert("complete"); //通信完了時
-        }
-        xhr.open('GET', window.location.origin+`/api/chatlog/${subjectId}`, true);
+        xhr.open('GET', `http://knium.net:3000/api/chatlog/${subjectId}`, true);
         xhr.send();
     };
-    const HOST = 'ws://localhost:3000/api/chat/send';
+    const HOST = 'ws://knium.net:3000/api/chat/send';
     const ws = new WebSocket(HOST); // eslint-disable-line no-undef
-    const room = { 0: '58b552de14d5f1260bed8574', 1: '58b5550314d5f1260bed8575' };
+    const room = { 0: '58d0dea52c0663e94d47e1a6', 1: '58d0dea52c0663e94d47e1a7' };
     const rand = Math.floor( Math.random() * 2); // eslint-disable-line
     const subject = { 0: '線形代数', 1: '微積分' };
     const title = document.getElementById('title'); // eslint-disable-line
@@ -38,7 +47,7 @@
             const text = `reIssueWSChat://${room[rand]}/?text=${input.value}&speaker=111111111111111111111111`;
             ws.send(text);
             input.value = '';
-            input.focus();   
+            input.focus();
         }
         return false;
     };
@@ -46,13 +55,26 @@
     ws.onerror = (error) => {
         console.log(`WebSocket Error ${error}`);
     };
-
-
+    
+    
     ws.onmessage = (msg) => {
         const response = msg.data;
         const messageList = document.querySelector('.messages'); // eslint-disable-line
+        
+        const span = document.createElement('span');
+        span.setAttribute("class", "mess-date");
+        span.textContent = getPostTime();
+        const p = document.createElement('p');
+        p.textContent = response;
+        
+        var reg = /<script[^>]*?>/i.test(response);
+        if (reg) {
+            p.setAttribute("class", "boo");
+        };
+        
+        p.appendChild(span);
         const li = document.createElement('li'); // eslint-disable-line
-        li.innerHTML = '<p>'+response+'<span class="mess-date">'+getPostTime()+'</sapn></p>';
+        li.appendChild(p);
         messageList.appendChild(li);
     };
     
@@ -66,3 +88,4 @@
     }
     
 }());
+

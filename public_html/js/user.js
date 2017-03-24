@@ -1,6 +1,7 @@
 (function() {
     var url = window.location.origin+"/api/taking";
     var user_id = "58b5179a82e96efabf76866f";
+    
     var weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     
     var xml = new XMLHttpRequest();
@@ -11,10 +12,8 @@
             display(data.taking);
         }
     }
-    xml.onload = function() {
-        //alert("complete"); //通信完了時
-    }
     xml.open("GET", url, true); // パラメータを(user_id)付けないといけない
+    xml.setRequestHeader( "Content-Type", "application/json" );
     xml.send(null);
     
     

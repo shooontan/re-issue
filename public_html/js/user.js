@@ -159,7 +159,7 @@
             
             console.log("repoRath: "+repoPath);
             
-            var repoLink = "http://knium.net:3000/"+repoPath;
+            var repoLink = "http://knium.net:3000"+repoPath;
             
             var a = document.createElement("a");
             a.setAttribute("href", repoLink);

@@ -75,6 +75,7 @@ function reissueSocket(sub_id) {
         var reg = /<script[^>]*?>/i.test(response);
         if (reg) {
             p.setAttribute("class", "boo");
+            alert("CTFじゃねーよはげ");
         };
         
         p.appendChild(span);

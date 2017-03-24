@@ -79,8 +79,9 @@
                     console.log(data);
                     
 
-                    // id保存
+                    // id名前を保存
                     document.cookie = "user_id="+data._id;
+                    document.cookie = "user_name="+data.name;
                     
                     console.log(document.cookie);
                     

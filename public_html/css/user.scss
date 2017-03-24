@@ -594,10 +594,17 @@ img {
             border-radius: 50%;
         }
 
-        .mess-date {
+        .mess-date, .display-name {
             margin-left: 1em;
             font-size: 14px;
             letter-spacing: -.1px;
+        }
+    }
+    
+    .boo {
+        .display-name {
+            font-size: 18px;
+            font-weight: bold;
         }
     }
 }

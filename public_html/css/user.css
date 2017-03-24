@@ -394,10 +394,13 @@ img {
       height: 6px;
       background: #aaa;
       border-radius: 50%; }
-    .comment p .mess-date {
+    .comment p .mess-date, .comment p .display-name {
       margin-left: 1em;
       font-size: 14px;
       letter-spacing: -.1px; }
+  .comment .boo .display-name {
+    font-size: 18px;
+    font-weight: bold; }
 
 .messages li {
   word-wrap: break-word; }

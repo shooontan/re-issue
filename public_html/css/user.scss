@@ -142,7 +142,6 @@ img {
 
 .header {
     position: relative;
-    margin: 0 0 100px 0;
     width: 100%;
 }
 
@@ -328,6 +327,10 @@ img {
         &:hover {
             background: rgba($line-color, .4);
         }
+        
+        span {
+            pointer-events: none;
+        }
     }
 }
 
@@ -352,6 +355,22 @@ img {
         text-align: center;
     }
 
+}
+
+.tab {
+    display: block;
+    
+    li{
+        display: inline-block;
+        border-bottom: 2px solid $line-color;
+        line-height: 50px;
+        text-align: center;
+        width: 33%;
+        
+        &:hover {
+            background: rgba(#F06292, .8);
+        }
+    }
 }
 
 .view, .chat {

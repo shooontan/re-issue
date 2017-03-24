@@ -88,7 +88,6 @@ img {
 
 .header {
   position: relative;
-  margin: 0 0 100px 0;
   width: 100%; }
 
 .header-inner {
@@ -221,6 +220,8 @@ img {
   transition: .3s; }
   .course-box li:hover {
     background: rgba(99, 165, 174, 0.4); }
+  .course-box li span {
+    pointer-events: none; }
 
 .main {
   padding: 0 0 90px;
@@ -237,6 +238,17 @@ img {
     position: relative;
     padding: 0 20px;
     text-align: center; }
+
+.tab {
+  display: block; }
+  .tab li {
+    display: inline-block;
+    border-bottom: 2px solid #63a5ae;
+    line-height: 50px;
+    text-align: center;
+    width: 33%; }
+    .tab li:hover {
+      background: rgba(240, 98, 146, 0.8); }
 
 .view, .chat {
   display: inline-block;

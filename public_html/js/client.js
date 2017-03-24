@@ -87,13 +87,22 @@ function reissueSocket(sub_id) {
     
     ws.onmessage = (msg) => {
         const response = msg.data;
+        
+        const resData = JSON.parse(response);
+        
         const messageList = document.querySelector('.messages'); // eslint-disable-line
         
+        // ユーザー名span
+        const nameSpan = document.createElement("span");
+        nameSpan.classList.add("display-name");
+        nameSpan.textContent = resData.speakerName;
+        // 投稿日span
         const span = document.createElement('span');
         span.setAttribute("class", "mess-date");
         span.textContent = getPostTime();
+        
         const p = document.createElement('p');
-        p.textContent = response;
+        p.textContent = resData.text;
         
         var reg = /<script[^>]*?>/i.test(response);
         if (reg) {
@@ -102,6 +111,8 @@ function reissueSocket(sub_id) {
         };
         
         p.appendChild(span);
+        p.appendChild(nameSpan);
+        
         const li = document.createElement('li'); // eslint-disable-line
         li.appendChild(p);
         messageList.appendChild(li);

@@ -113,7 +113,7 @@
                         
                     </div>
 
-                    <div class="chat">
+                    <div id="tabChatBox" class="chat active">
                         <div class="comment">
                             <ul class="messages"></ul>
                         </div>
@@ -125,18 +125,16 @@
                     </div>
                     
                     
-                    <div class="repo">
+                    <div id="tabRepoBox" class="repo">
                         <div class="repo-inner">
-                            
                         </div>
                     </div>
                     
                     
-                    <div class="upload">
-                        <form action="api/pastreport" method="POST" enctype="multipart/form-data">
-<!--                            <form action="http://knium.net:3000/api/pastreport" method="POST" enctype="multipart/form-data">-->
+                    <div id="tabUploadBox" class="upload">
+                        <form action="http://knium.net:3000/api/pastreport" method="POST" enctype="multipart/form-data">
                             <input type="file" name="upName">
-                            <input type="hidden" name="subjectId" value="58b5550314d5f1260bed8575" />
+                            <input type="hidden" name="subjectId" id="subjectId" value="58b5550314d5f1260bed8575" />
                             <input type="submit">
                         </form>
                     </div>

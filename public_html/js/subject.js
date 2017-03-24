@@ -1,7 +1,21 @@
 // 初期画面の形成
 (function (){
-    var url = "http://knium.net:3000/api/subject/getbycourse/?course=MI";
+//    var url = "http://knium.net:3000/api/subject/getbycourse/?course=MI";
     var weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    
+    function getCookie(key) {
+        var cookies = document.cookie;
+        var cookieItem = cookies.split(";");
+        for (i = 0; i < cookieItem.length; i++) {
+            var elem = cookieItem[i].split("=");
+            if (elem[0].trim() === key) {
+                return unescape(elem[1]);
+            } else {
+                continue;
+            }
+        }
+    }
+    
     
     // 週6、7限までの授業オブジェクト
     function display(subjects) {
@@ -27,35 +41,46 @@
         }
     }
     
-    function getCookie(key) {
-        var cookies = document.cookie;
-        var cookieItem = cookies.split(";");
-        for (i = 0; i < cookieItem.length; i++) {
-            var elem = cookieItem[i].split("=");
-            if (elem[0].trim() === key) {
-                return unescape(elem[1]);
-            } else {
-                continue;
+    
+    // コースからデフォルト科目を取得する
+    function getDefSubs(course) {
+        var courseUrl = "http://knium.net:3000/api/subject/getbycourse/?course=";
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function () {
+            if (xml.readyState === 4 && xml.status === 200) {
+                // デフォルト科目一覧
+                var defaultSub = JSON.parse(xml.responseText);
+
+                // 土曜日追加(仮)
+                defaultSub["Sat"] = [null,null,null,null,null,null,null];
+
+                display(defaultSub);
             }
-        }
+        };
+        xml.open("GET", courseUrl+course, true);
+        xml.setRequestHeader("Content-Type", "application/json");
+        xml.send(null);   
     }
     
-    // デフォルト科目を取得する
+    
+    var urlBase = "http://knium.net:3000/api/user/";
+    var userId = getCookie("user_id");
+
+    
+    // ユーザーのコースを取得
     var xml = new XMLHttpRequest();
     xml.onreadystatechange = function () {
         if (xml.readyState === 4 && xml.status === 200) {
-            // デフォルト科目一覧
-            var defaultSub = JSON.parse(xml.responseText);
-            
-            // 土曜日追加(仮)
-            defaultSub["Sat"] = [null,null,null,null,null,null,null];
-            
-            display(defaultSub);
+            // ユーザーデータ取得
+            var userData = JSON.parse(xml.responseText);
+            // 
+            getDefSubs(userData.course);
         }
     };
-    xml.open("GET", url, true);
+    xml.open("GET", urlBase+userId, true);
     xml.setRequestHeader("Content-Type", "application/json");
     xml.send(null);
+    
     
 }());
 
@@ -75,6 +100,9 @@
     var modalDelete = document.getElementById("deleteBtn");
     
     var urlBase = "http://knium.net:3000/api/subject/getByDayAndPeriod/?";
+    
+    var targetTd;
+    
     // スクロール量
     var scrollY;
     
@@ -137,6 +165,9 @@
     // 時間割クリック
     table.addEventListener("click", function(e) {
         if ( e.target.tagName === "TD" ) {
+            
+            targetTd = e.target;
+            
             scrollY = window.pageYOffset; // スクロール量
             var tdPosi = getTdPosition(e.target);  // [0]:限 [1]:曜日
             
@@ -166,15 +197,15 @@
             // モーダルウィンドウを開く
             openModal();
             
-            
-            // モーダル削除
-            modalDelete.addEventListener("click", function() {
-                e.target.textContent = "";
-                e.target.removeAttribute("data-subid");
-            }, false);
-            
-            
         }
+    }, false);
+    
+    
+    // モーダル内で科目削除
+    modalDelete.addEventListener("click", function(e) {
+        targetTd.textContent = '';
+        targetTd.removeAttribute("data-subid");
+        closeModal();
     }, false);
     
     

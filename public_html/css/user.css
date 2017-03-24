@@ -72,7 +72,7 @@ a {
   text-decoration: none;
   transition: .3s; }
   a:hover {
-    color: #48caa2; }
+    color: rgba(232, 177, 96, 0.8); }
 
 img {
   display: inline-block; }
@@ -186,7 +186,7 @@ img {
     overflow-y: scroll; }
 
 .user-box, .course-box, search-box {
-  padding: 0 15px 15px;
+  padding-bottom: 15px;
   width: 200px; }
 
 .user-box {
@@ -214,10 +214,11 @@ img {
 .course-box ul + p {
   margin: 1em 0 0; }
 .course-box li {
-  padding: 0 5px;
+  padding: 0 10px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 0 white;
-  transition: .3s; }
+  transition: .3s;
+  cursor: pointer; }
   .course-box li:hover {
     background: rgba(99, 165, 174, 0.4); }
   .course-box li span {
@@ -403,6 +404,7 @@ img {
     font-weight: bold; }
 
 .messages li {
+  margin-bottom: 12px;
   word-wrap: break-word; }
 
 .submit-form {
@@ -472,6 +474,24 @@ img {
       height: 30px;
       fill: #555;
       transision: .3s; }
+
+.repo {
+  padding-top: 40px;
+  text-align: left; }
+  .repo li {
+    position: relative;
+    margin-bottom: 2em;
+    padding-left: 26px;
+    word-wrap: break-word; }
+    .repo li:before {
+      position: absolute;
+      top: 10px;
+      left: 12px;
+      content: "";
+      width: 6px;
+      height: 6px;
+      background: #aaa;
+      border-radius: 50%; }
 
 .upload {
   padding-top: 50px; }

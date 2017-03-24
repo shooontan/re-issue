@@ -120,7 +120,7 @@ a {
     transition: .3s;
 
     &:hover {
-        color: #48caa2;
+        color: rgba(232, 177, 96, 0.8);
     }
 }
 
@@ -277,7 +277,7 @@ img {
 }
 
 .user-box, .course-box, search-box {
-    padding: 0 15px 15px;
+    padding-bottom: 15px;
     width: 200px;
 }
 
@@ -319,10 +319,11 @@ img {
     }
     
     li {
-        padding: 0 5px;
+        padding: 0 10px;
         border-bottom: 1px solid rgba(0,0,0,0.1);
         box-shadow: 0 1px 0 rgba(255,255,255,1);
         transition: .3s;
+        cursor: pointer;
         
         &:hover {
             background: rgba($line-color, .4);
@@ -611,6 +612,7 @@ img {
 
 .messages {
     li {
+        margin-bottom: 12px;
         word-wrap: break-word;
     }
 }
@@ -709,6 +711,26 @@ img {
 
 // 過去レポ一覧
 .repo {
+    padding-top: 40px;
+    text-align: left;
+    
+    li {
+        position: relative;
+        margin-bottom: 2em;
+        padding-left: 26px;
+        word-wrap: break-word;
+        
+        &:before {
+            position: absolute;
+            top: 10px;
+            left: 12px;
+            content: "";
+            width: 6px;
+            height: 6px;
+            background: #aaa;
+            border-radius: 50%;
+        }
+    }
 }
 
 

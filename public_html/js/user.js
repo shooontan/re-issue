@@ -18,9 +18,7 @@
         }
     }("user_id");
     
-    
-    console.log(document.cookie);
-    console.log(user_id);
+    console.log("user_id: "+user_id);
     
     
     var xml = new XMLHttpRequest();
@@ -55,7 +53,6 @@
                     
                     // liにクリックイベント
                     li.addEventListener("click", function(e) {
-                        console.log(e.target.getAttribute("data-subid"));
                         
                         var subCook = "sub_id="+e.target.getAttribute("data-subid");
                         
@@ -78,7 +75,7 @@
             if (xml.readyState === 4 && xml.status === 200) {
                 // ユーザーデータ
                 var data = JSON.parse(xml.responseText);
-                console.log(data.name);
+                console.log("name: "+data.name);
                 // 名前表示
                 var displayName = document.getElementById("displayName");
                 displayName.textContent = data.name;
@@ -110,19 +107,86 @@
 (function() {
     var tabs = ["tabChat", "tabRepo", "tabUpload"];
     var target = [];
+    var targetBox = [];
     
     for(var i = 0; i < tabs.length; i++) {
         target[i] = document.getElementById(tabs[i]);
+        targetBox[i] = document.getElementById(tabs[i]+"Box");
         
         // クリックイベント
         target[i].addEventListener("click", function(e) {
             for(var j = 0; j < tabs.length; j++) {
                 if (e.target.id === tabs[j]) {
                     target[j].classList.add("active");
+                    targetBox[j].classList.add("active");
                 } else {
                     target[j].classList.remove("active");
+                    targetBox[j].classList.remove("active");
                 }
             }
         }, false);
     }
+}());
+
+
+// 過去レポ一覧
+(function() {
+    var urlBase = "http://knium.net:3000/api/pastreport/getbysubjectID/?_id=";
+    var repoList = document.getElementById("repoList");
+    
+    function getCookie(key) {
+        var cookies = document.cookie;
+        var cookieItem = cookies.split(";");
+        for (i = 0; i < cookieItem.length; i++) {
+            var elem = cookieItem[i].split("=");
+            if (elem[0].trim() === key) {
+                return unescape(elem[1]);
+            } else {
+                continue;
+            }
+        }
+    }
+    
+    // 科目科目を取得
+    var subId = getCookie("sub_id");
+    
+    
+    // 過去レポデータから一覧を表示する
+    function displayRepo(repoData) {
+        
+        for(var i = 0; i < repoData.length; i++) {
+            var repoPath = repoData[i].path;
+            
+            console.log("repoRath: "+repoPath);
+            
+            var repoLink = "http://knium.net:3000/"+repoPath;
+            
+            var a = document.createElement("a");
+            a.setAttribute("href", repoLink);
+            a.textContent = repoLink;
+            
+            var li = document.createElement("li");
+            li.appendChild(a);
+            
+            repoList.appendChild(li);
+            
+        }
+    }
+    
+    
+    
+
+    var xml = new XMLHttpRequest();
+    xml.onreadystatechange = function() {
+        if (xml.readyState === 4 && xml.status === 200) {
+            // ユーザーの履修データ
+            var data = JSON.parse(xml.responseText);
+            displayRepo(data);
+        }
+    }
+    xml.open("GET", urlBase+subId, true);
+    xml.setRequestHeader( "Content-Type", "application/json" );
+    xml.send(null);
+    
+    
 }());

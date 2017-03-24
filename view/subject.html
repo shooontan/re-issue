@@ -11,24 +11,24 @@
 
     <body>
         <svg class="defs"></svg>
-        
-            <header class="header">
-                <div class="header-inner">
-                    <div class="date-box">
-                        <p class="page-number"><span>No. </span><span>3</span></p>
-                        <p class="date">Date  <span>2017</span><span>03</span><span>13</span></p>
-                    </div>
-                    <h1>Re:issue「<span class="subject">科目登録</span>」</h1>
+
+        <header class="header">
+            <div class="header-inner">
+                <div class="date-box">
+                    <p class="page-number"><span>No. </span><span>3</span></p>
+                    <p class="date">Date  <span>2017</span><span>03</span><span>13</span></p>
                 </div>
-            </header>
-            
-            <main class="main">
-                
-                <div class="main-inner">
-                    
-                    <p>Re:isseuに登録する科目を選択する。追加・削除可。</p>
-                    
-                    <div class="table-containner">                    
+                <h1>Re:issue「<span class="subject">科目登録</span>」</h1>
+            </div>
+        </header>
+
+        <main class="main">
+
+            <div class="main-inner">
+
+                <p>Re:isseuに登録する科目を選択する。追加・削除可。</p>
+
+                <div class="table-containner">                    
                     <table id="subjectTable">
                         <thead>
                             <tr class="week">
@@ -50,38 +50,44 @@
                             <tr id="period7" class="period"></tr>
                         </tbody>
                     </table>
-                        
-                    </div>
 
                 </div>
-                
-                <div>
-                    <form method="post" id="tableForm" class="table-form" action="/user">
-                        <input type="hidden" id="tableVal" name="subject">
-                        <button type="submit" class="re-btn">時間割を登録する</button>
-                    </form>
-                </div>
-                
-                <div id="modalWindow" class="modal-window">
-                    <div id="modalInner" class="modal-inner">
 
-                        <h3><span id="modalDay">月</span>曜日<span id="modalPeriod">1</span>限の講義を選択する</h3>
-                        
-                        <div class="modal-btn-box">
-                            <p id="closeBtn" class="close-btn">閉じる
-                            <p class="register-btn">登録する
-                            <p class="delete-btn">削除する
-                        </div>
+            </div>
+
+            <div>
+                <form method="post" id="tableForm" class="table-form" action="/user">
+                    <input type="hidden" id="tableVal" name="subject">
+                    <button type="submit" class="re-btn">時間割を登録する</button>
+                </form>
+            </div>
+
+            <div id="modalWindow" class="modal-window">
+                <div id="modalInner" class="modal-inner">
+
+                    <h3><span id="modalDay">月</span>曜日<span id="modalPeriod">1</span>限の講義を選択する</h3>
+
+                    <div class="modal-subject-box">
+                        <p class="select-title">現在選択している講義「<span id="modalSub"></span>」</p>
+                        <p>この時間にある他の講義</p>
+                        <ul id="modalList"></ul>
+                    </div>
+
+                    <div class="modal-btn-box">
+                        <p id="closeBtn" class="close-btn">戻る
+                        <p class="register-btn">登録する
+                        <p class="delete-btn">削除する
                     </div>
                 </div>
-                
-            </main>
-            
-            <footer class="footer">
-                <p class="copyright">&copy; 2017 Re:issue</p>
-            </footer>
-            
-        
+            </div>
+
+        </main>
+
+        <footer class="footer">
+            <p class="copyright">&copy; 2017 Re:issue</p>
+        </footer>
+
+
         <script src="/js/subject.js"></script>
 
     </body>

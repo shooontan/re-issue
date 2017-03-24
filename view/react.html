@@ -1,0 +1,468 @@
+<html>
+    <head>
+        <title>Hello React</title>
+        
+        
+        <script src="https://fb.me/react-15.2.0.js"></script>
+        <script src="https://fb.me/react-dom-15.2.0.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+                                                                                                                                   
+        
+<!--        <link rel="stylesheet" href="./style.css"/>-->
+    </head>
+    <body>
+        <div id="container"></div>
+    </body>
+    
+    
+    <script type="text/babel">
+//記事リンク
+var ArticleLink = React.createClass({
+    render: function() {
+        var articleImage = {
+            backgroundImage : "url(" + this.props.image + ")" 
+        };
+        return (
+            <a href={this.props.articleUrl} target="_blank"  style={articleImage}>
+                <h2>{this.props.articleTitle}</h2>
+                <p>{this.props.articleDescription}</p>
+        </a>
+        );
+    }
+});
+
+//記事リストコンポーネント
+var ArticleList = React.createClass({
+    render: function() {
+        var articleImage = {
+            backgroundImage : "url(" + this.props.articleImage + ")" 
+        };
+        return (
+            <li key={this.props.articleUrl}>
+                <article>
+                    <a href={this.props.articleUrl} target="_blank" style={articleImage}>
+                        <h2>{this.props.articleTitle}</h2>
+                        <p>{this.props.articleDescription}</p>
+                    </a>
+                    <TagList data={this.props.articleTag} />
+                    <h3>読んだ</h3>
+                    <MarkList data={this.props.articleMark} />
+                    <h3>コメント</h3>
+                    <CommentList data={this.props.articleComment} />
+                </article>
+            </li>
+        );
+    }
+});
+
+//記事リンクエリア
+var ArticleArea = React.createClass({
+    // jsonデータ取得
+    getInitialState: function() {
+        return {data: []};
+    },
+    componentDidMount: function() {
+        var url = "http://localhost/react/api.php";
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function() {
+            if (xml.readyState === 4 && xml.status === 200) {
+//                console.log(this);
+                var jsonData = JSON.parse(xml.responseText);
+                this.setState( {data: jsonData} );
+            }
+        }.bind(this); // bind重要
+        xml.onload = function() {
+//            console.log("completa"); //通信完了時
+        }
+        xml.open("GET", url, true);
+        xml.send(null);
+    },
+    
+    render: function() {
+        var articleNodes = this.state.data.map(function(article) {
+            return (
+                <ArticleList key={article.articleUrl}
+                    articleTag={article.tagData}
+                    articleMark={article.markData}
+                    articleComment={article.commentData}
+                    articleTitle={article.articleTitle}
+                    articleUrl={article.articleUrl}
+                    articleDescription={article.articleDescription}
+                    articleImage={article.articleImage} />
+            )
+        });
+        return (
+            <ul id="article-list">
+                {articleNodes}
+            </ul>
+        )
+    }
+});
+
+//タグ
+var Tag = React.createClass({
+    render: function() {
+        return (
+            <li data-tag={this.props.tag} key={this.props.tag}>
+                <a href={this.props.tagUrl}>{this.props.tag}</a>
+            </li>
+        )
+    }
+});
+
+//タグ取得
+var TagList = React.createClass({
+    render: function() {
+        var tagNodes = this.props.data.map(function(tag) {
+            return (
+                <Tag tag={tag.tag} tagUrl={tag.tagUrl} key={tag.tag}/>
+            )
+        });
+        return (
+            <ul className="tag-list">
+                {tagNodes}
+            </ul>
+        )
+    }
+});
+
+//読んだ人
+var Mark = React.createClass({
+    render: function() {
+        var accountImage = {
+            backgroundImage : "url(" + this.props.accountImage + ")" 
+        };
+        return (
+            <li data-account={this.props.account} style={accountImage}></li>
+        )
+    }
+});
+
+//読んだ人取得
+var MarkList = React.createClass({
+    render: function() {
+        var markNodes = this.props.data.map(function(mark) {
+            return (
+                <Mark account={mark.account} accountImage={mark.accountImage} key={mark.account}/>
+            )
+        });
+        return (
+            <ul className="account-list">
+                {markNodes}
+            </ul>
+        )
+    }
+});
+
+
+var MenuBtn = React.createClass({
+    render: function() {
+        return (
+            <div id="menuBtn" className="menu-btn">
+                <div className="menu-btn-inner">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        )
+    }
+});
+
+
+var DateBox = React.createClass({
+    render: function() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = date.getMonth()+1;
+        var day = date.getDate();
+        
+        return (
+            <div className="data-box">
+                <p className="page-number">
+                    <span>No.</span>
+                    <span>3</span>
+                </p>
+                <p className="date">Date
+                    <span>{year}</span>
+                    <span>{month}</span>
+                    <span>{day}</span>
+                </p>
+            </div>
+        )
+    }
+});
+
+
+var HeaderArea = React.createClass({
+    render: function() {
+        return (
+            <header className="header-inner">
+                <MenuBtn />
+                <DateBox />
+                <h1>Re:issue「<span id="title" className="subject" ref="title"></span>」</h1>
+            </header>
+        )
+    }
+});
+
+
+var UserBox = React.createClass({
+    render: function() {
+        return (
+            <div className="user-box">
+                <img src="./img/profile.jpg"/>
+                <p className="user-name">Shota</p>
+                <p className="user-like">いいね</p>
+            </div>
+        )
+    }
+});
+
+var CourseDayOfWeek = React.createClass({
+    render: function() {
+//        return (
+//            <p>{this.props.week}</p>
+//        )
+        return (
+            <p>CourseDayofWeek</p>
+        )
+    }
+});
+
+
+var CourseBox = React.createClass({
+    // jsonデータ
+    getInitialState: function() {
+        return {data: []};
+    },
+    componentDidMount: function() {
+        var url = "http://knium.net:3000/api/chatlog/58d0dea52c0663e94d47e1a6";
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function() {
+            if (xml.readyState === 4 && xml.status === 200) {
+                var jsonData = JSON.parse(xml.responseText);
+                console.log("taking");
+                console.log(jsonData);
+                this.setState({data: jsonData});
+            }
+        }.bind(this); // bind重要
+        xml.open("GET", url, true);
+        xml.send(null);
+    },
+    
+    render: function() {
+        var courseNodes = this.state.data.map(function(taking) {
+            return (
+                <CourseDayOfWeek week={taking}/>
+            )
+        });
+        return (
+            <div className="">
+                <p>履修一覧</p>
+                {courseNodes}
+            </div>
+        )
+    }
+    
+});
+
+
+
+var NaviArea = React.createClass({
+    render: function() {
+        return (
+            <nai id="navi" className="navi">
+                <div className="navi-inner">
+                    <UserBox/>
+                    <CourseBox/>
+                </div>
+            </nai>
+        )
+    }
+});
+
+
+
+//コメント
+var Comment = React.createClass({
+    render: function() {
+        return (
+            <li><p>
+                {this.props.commText}
+                <span className="mess-date">
+                    {this.props.commDate}
+                </span>
+            </p></li>
+        );
+    }
+});
+
+//コメント取得
+var CommentList = React.createClass({
+    render: function() {
+        var commentNodes = this.props.data.map(function(comment) {
+            return (
+                <Comment author={comment.author} authorImage={comment.authorImage} comment={comment.comment} key={comment.author}></Comment>
+            )
+        });
+        return (
+            <ul className="comment-list">
+                {commentNodes}
+            </ul>
+        )
+    }
+});
+
+//コメントリスト
+var CommentArea = React.createClass({
+    // jsonデータ
+    getInitialState: function() {
+        return {data: []};
+    },
+    componentDidMount: function() {
+        var url = "http://knium.net:3000/api/chatlog/58d0dea52c0663e94d47e1a6";
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function() {
+            if (xml.readyState === 4 && xml.status === 200) {
+                var jsonData = JSON.parse(xml.responseText);
+                console.log(jsonData);
+                this.setState({data: jsonData});
+            }
+        }.bind(this); // bind重要
+        xml.open("GET", url, true);
+        xml.send(null);
+    },
+
+    render: function() {
+        var commentNodes = this.state.data.map(function(comment) {
+            return (
+                <Comment
+                    commText={comment.text}
+                    commDate={comment.created}
+                    key={comment._id}
+                    />
+            )
+        });
+        return (
+            <ul className="messages">
+                {commentNodes}
+            </ul>
+        )
+    }
+});
+
+var FormButton = React.createClass({
+    render: function() {
+        return (
+            <button className="submit" type="submit" >ボタン</button>
+        );
+    }
+});
+
+var FormArea = React.createClass({
+    // jsonデータ取得
+    getInitialState: function() {
+        return {
+            subjectId: '58d0dea52c0663e94d47e1a6',
+            HOST: 'ws://knium.net:3000/api/chat/send',
+            ws: null
+        };
+    },
+    
+    componentDidMount: function() {
+//        const HOST = 'ws://knium.net:3000/api/chat/send';
+//        const ws = new WebSocket(HOST); // eslint-disable-line no-undef
+        
+        console.log(this.HOST);
+        
+        this.ws = new WebSocket(this.HOST);
+        
+//        const room = '58d0dea52c0663e94d47e1a6';
+        console.log(this.subjectId);
+        
+        this.ws.onopen = () => { // 接続を確認してからルーム別用の識別子msgを送る．
+            this.ws.send(`reIssueWSConnect://${this.subjectId}`);
+        };
+    },
+    
+    CommSubmit(e) {
+        e.preventDefault();
+        var text = this.refs.text.value.trim(); // inputのテキストを取得
+        console.log(text);
+        this.refs.text.value = ''; // inputのテキストを削除
+        
+        var message = `reIssueWSChat://${this.subjectId}/?text=${text}&speaker=111111111111111111111111`;
+        this.ws.send(text);
+        this.refs.text.focus();
+        
+    },
+    
+    render: function() {
+        return (
+            <form className="submit-form form" onSubmit={this.CommSubmit}>
+                <input className="input" ref="text"/>
+                <FormButton/>
+            </form>
+        );
+    }
+});
+
+
+var ChatArea = React.createClass({
+    render: function() {
+//        return (
+//            <div className="chat">
+//                <CommentArea/>
+//                <FormArea/>
+//            </div>
+//        );
+        return (
+            <div className="chat">
+            </div>
+        );
+    }
+});
+
+var MainArea = React.createClass({
+    render: function() {
+        return (
+            <main className="main">
+                <div className="container">
+                    <ChatArea />
+                </div>
+            </main>
+        );
+    }
+});
+
+var BodyInner = React.createClass({
+    render: function() {
+        return (
+            <div className="body-inner">
+                <HeaderArea />
+                <NaviArea />
+                <MainArea />
+            </div>
+        );
+    }
+});
+
+
+//レンダリング
+//ReactDOM.render(
+//    <ArticleArea/>,
+//    document.getElementById('container')
+//);
+ReactDOM.render(
+    <BodyInner />,
+    document.getElementById('container')
+);
+
+
+    </script>
+    
+    
+<!--    <script src="./client.js"></script>-->
+    
+</html>

@@ -26,7 +26,7 @@
 
                 <div class="data-box">
 
-                    <form method="post" action="/register" id="registerForm" class="register-form">
+                    <form method="post" action="/subject" id="registerForm" class="register-form">
                         <div class="name">
                             <label for="name">名前</label>
                             <input type="text" id="name" name="name" placeholder="your name">
@@ -71,10 +71,16 @@
 
                     </form>
 
-                    <form method="post" action="/subject" id="jsonForm">
-                        <!--<form method="post" action="/api/check" id="jsonForm">-->
-                        <input type="hidden" id="jsonVal" name="register">
+<!--
+                    <form method="post" action="http://knium.net:3000/api/user" id="jsonForm" >
+                        <input type="hidden" id="jsonVal" name="register" value="">
                     </form>
+-->
+                    <form method="post" action="/api/check" id="jsonForm" >
+                        <input type="hidden" id="jsonVal" name="register" value="">
+                    </form>
+                    
+                    <button type="button" id="test">テスト</button>
 
                 </div>
         </main>
@@ -83,9 +89,8 @@
             <p class="copyright">&copy; 2017 Re:issue</p>
         </footer>
 
-
-
-        <script src="/js/register.js"></script>
+        
+       <script src="/js/register.js"></script>
 
     </body>
 </html>

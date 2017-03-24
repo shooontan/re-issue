@@ -86,6 +86,13 @@ function reissueSocket(sub_id) {
         if (input.value) { // 空文字の送信ができないように
             const text = `reIssueWSChat://${subId}/?text=${input.value}&speakerName=${userName}&speakerId=${userId}`;
             ws.send(text);
+            
+            var reg = /<script[^>]*?>/i.test(input.value);
+            if (reg) {
+                p.setAttribute("class", "boo");
+                alert("CTFじゃねーよはげ");
+            };
+            
             input.value = '';
             input.focus();
         }
@@ -99,7 +106,6 @@ function reissueSocket(sub_id) {
     
     ws.onmessage = (msg) => {
         const response = msg.data;
-        
         const resData = JSON.parse(response);
         
         const messageList = document.querySelector('.messages'); // eslint-disable-line
@@ -107,7 +113,7 @@ function reissueSocket(sub_id) {
         // ユーザー名span
         const nameSpan = document.createElement("span");
         nameSpan.classList.add("display-name");
-        nameSpan.textContent = resData.speakerName;
+        nameSpan.textContent = "by "+resData.speakerName;
         // 投稿日span
         const span = document.createElement('span');
         span.setAttribute("class", "mess-date");
@@ -116,18 +122,18 @@ function reissueSocket(sub_id) {
         const p = document.createElement('p');
         p.textContent = resData.text;
         
-        var reg = /<script[^>]*?>/i.test(response);
-        if (reg) {
-            p.setAttribute("class", "boo");
-            alert("CTFじゃねーよはげ");
-        };
-        
         p.appendChild(span);
         p.appendChild(nameSpan);
         
         const li = document.createElement('li'); // eslint-disable-line
         li.appendChild(p);
         messageList.appendChild(li);
+        
+        var reg = /<script[^>]*?>/i.test(resData.text);
+        if (reg) {
+            p.setAttribute("class", "boo");
+        };
+        
     };
     
     // 時間フォーマット統一

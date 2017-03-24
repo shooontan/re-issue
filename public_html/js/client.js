@@ -31,9 +31,20 @@ function reissueSocket(sub_id) {
                 const chatLog = JSON.parse(xhr.response);
                 for (let i = 0; i < chatLog.length; i += 1) {
                     const messageList = document.querySelector('.messages'); // eslint-disable-line
-                    const span = document.createElement('span');
-                    span.setAttribute("class", "mess-date");
-                    span.textContent = getPostTime(chatLog[i].created);
+                    
+                    console.log(chatLog[i]);
+                    
+                    // ユーザー名span
+                    const nSpan = document.createElement("span");
+                    nSpan.classList.add("display-name");
+                    nSpan.textContent = "by "+chatLog[i].speakerName;
+                    
+                    // 投稿日span
+                    const dSpan = document.createElement('span');
+                    dSpan.setAttribute("class", "mess-date");
+                    dSpan.textContent = getPostTime(chatLog[i].created);
+                    
+                    
                     const p = document.createElement('p');
                     p.textContent = chatLog[i].text; // 本文
                     
@@ -42,7 +53,8 @@ function reissueSocket(sub_id) {
                         p.setAttribute("class", "boo");
                     };
                     
-                    p.appendChild(span);
+                    p.appendChild(dSpan);
+                    p.appendChild(nSpan);
                     const li = document.createElement('li'); // eslint-disable-line
                     li.appendChild(p);
                     messageList.appendChild(li);
@@ -124,7 +136,7 @@ function reissueSocket(sub_id) {
         if ( time !== undefined ) {
             date = new Date(time);
         }
-        return date.getFullYear()+'.'+(date.getMonth()+1)+'.'+date.getDate();
+        return `${date.getFullYear()}.${date.getMonth()+1}.${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
     }
     
 

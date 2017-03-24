@@ -1,7 +1,6 @@
 // 初期画面の形成
 (function (){
-//    var url = "http://knium.net:3000/api/subject/getbycourse/?course=MI";
-    var url = "http://reissue/api/subject";
+    var url = "http://knium.net:3000/api/subject/getbycourse/?course=MI";
     var weeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     
     // 週6、7限までの授業オブジェクト
